@@ -70,7 +70,9 @@ This extension for Keystone is intended to create a REST API very easy. Also is 
     keystone.start();
 
     // Add routes with Keystone
-    keystoneRestApi.createRest(keystone);
+    keystoneRestApi.createRest(keystone, {
+		apiRoot: '/api/v1/'
+	});
 	
 	// Create Documentation and write it to a file
 	fs.writeFileSync('api.md', keystoneRestApi.apiDocs(), 'UTF-8');
@@ -78,7 +80,7 @@ This extension for Keystone is intended to create a REST API very easy. Also is 
 
 ### TODO
 - The "update" and "create" method must use the Keystone UpdateHandler (Done)  
-- New Tests based on the changes.
+- New Tests based on the changes.  
 
 ## Authors
 
