@@ -123,7 +123,9 @@
     keystone.start();
 
     // Add routes with Keystone
-    keystoneRestApi.createRest(keystone);
+    keystoneRestApi.createRest(keystone, {
+		apiRoot: '/api/v1/'
+	});
 
     // Create Documentation and write it to a file
     fs.writeFileSync('api.md', keystoneRestApi.apiDocs(), 'UTF-8');
