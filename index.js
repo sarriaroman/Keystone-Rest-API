@@ -67,26 +67,26 @@ var api_blueprint = {
 
 		return tmp;
 	},
-	
-	convertType: function(type) {
+
+	convertType: function (type) {
 		type = type.toLowerCase();
-		
-		if( type == 'objectid' ) {
+
+		if (type == 'objectid') {
 			type = 'object';
 		}
-		
+
 		return type;
 	},
-	
-	convertDefault: function(value) {
-		if( typeof(value) == 'string' && value == '' ) {
+
+	convertDefault: function (value) {
+		if (typeof (value) == 'string' && value == '') {
 			return "''";
 		}
-		
-		if( !value ) {
+
+		if (!value) {
 			return "''";
 		}
-		
+
 		return value;
 	}
 };
@@ -257,6 +257,20 @@ function KeystoneRest() {
 		return options.type[0].ref;
 	};
 
+	var _registerList = function (md) {
+		// Check if Rest must be enabled
+		try {
+			if (md && md.options.rest) {
+				// Register the model
+				addRoutes(md, md.options.restOptions, md.restHooks, md.model.collection.name);
+			} else {
+				console.info('Rest is not enabled for ' + md.model.collection.name);
+			}
+		} catch (e) {
+			console.info('Error registering List. Please verify')
+		}
+	};
+
 	/**
 	 * Register the models that has the Rest Option enabled
 	 *
@@ -270,11 +284,7 @@ function KeystoneRest() {
 			// Get the Keyston List
 			var md = app.list(keys[i]);
 
-			// Check if Rest must be enabled
-			if (md && md.options.rest) {
-				// Register the model
-				addRoutes(md, md.options.restOptions, md.restHooks, md.model.collection.name);
-			}
+			_registerList(md);
 		}
 	};
 
@@ -536,19 +546,16 @@ function KeystoneRest() {
 
 				_flattenRelationships(Model, req.body);
 
-				item = new Model(req.body);
+				var md = new Model();
 
-				item.save(function (err, item) {
+				// Get the UpdateHandler from Keystone and process the Request
+				md.getUpdateHandler(req).process(req.body, {
+					flashErrors: false
+				}, function (err, item) {
 					if (err) {
 						return _sendError(err, req, res, next);
 					}
-
-					Model.findById(item._id).select(selected).exec(function (err, item) {
-						if (err) {
-							return _sendError(err, req, res, next);
-						}
-						res.json(item);
-					});
+					res.json(item);
 				});
 			}
 		});
@@ -602,9 +609,12 @@ function KeystoneRest() {
 					return _sendError(new mongoose.Error.VersionError(), req, res, next);
 				}
 
-				_.extend(item, req.body);
-
-				item.save(function (err, item) {
+				//_.extend(item, req.body); // Not sure about extending with UpdateHandler
+				
+				// Get the UpdateHandler and update
+				item.getUpdateHandler(req).process(req.body, {
+					flashErrors: false
+				}, function (err, item) {
 					if (err) {
 						return _sendError(err, req, res, next);
 					}
@@ -684,7 +694,7 @@ function KeystoneRest() {
 
 	/**
 	 * Add routes
-	 * 
+	 *
 	 * @param {Object} keystoneList  Instance of KeystoneList
 	 * @param {String} methods       Methods to expose('list show create update delete')
 	 * @param {Object} middleware    Map containing middleware to execute for each action ({ list: [middleware] })
@@ -763,10 +773,19 @@ function KeystoneRest() {
 		}
 	};
 
+	/**
+	 * Register a Keystone List manually.
+	 *
+	 * @param {Object} list Object of Type Keystone List
+	 */
+	this.registerList = function (list) {
+		_registerList(list);
+	};
+
 
 	/**
 	 * Creates Rest
-	 * 
+	 *
 	 * @param  {Object} app Keystone instance
 	 */
 
@@ -791,7 +810,7 @@ function KeystoneRest() {
 
 	/**
 	 * Returns the API Docs for the API Created
-	 * 
+	 *
 	 * @returns {String} The Blueprint formatted API
 	 */
 	this.apiDocs = function () {
@@ -804,10 +823,10 @@ function KeystoneRest() {
 				documentation.push(doc);
 			});
 
-			md_doc.push(documentation.join( ( api_blueprint.new_line + api_blueprint.new_line ) ));
+			md_doc.push(documentation.join((api_blueprint.new_line + api_blueprint.new_line)));
 		});
 
-		return md_doc.join( ( api_blueprint.new_line + api_blueprint.new_line ) );
+		return md_doc.join((api_blueprint.new_line + api_blueprint.new_line));
 	};
 }
 

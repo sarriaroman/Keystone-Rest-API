@@ -17,17 +17,17 @@ This extension for Keystone is intended to create a REST API very easy. Also is 
 	
 	+ restOptions {String} 'list show create update delete'  
   
- - Methods  
+ - List Object    
   	+ restHooks {Object}  
 
 ```
-   		{
-    			list: [listMiddleware],
-    			show: [showMiddleware],
-    			create: [createMiddleware],
-    			update: [updateMiddleware],
-    			delete: [deleteMiddleware]
-  			}
+{
+    list: [listMiddleware],
+    show: [showMiddleware],
+    create: [createMiddleware],
+    update: [updateMiddleware],
+	delete: [deleteMiddleware]
+}
 ```
    
  - Fields  
@@ -39,8 +39,9 @@ This extension for Keystone is intended to create a REST API very easy. Also is 
 
 ```
     var keystone = require('keystone'),
-      Types = keystone.Field.Types,
-      keystoneRestApi = require('keystone-rest-api');
+		fs = require('fs'),
+      	Types = keystone.Field.Types,
+      	keystoneRestApi = require('keystone-rest-api');
 
     var User = new keystone.List('User', {
 		rest: true,
@@ -48,17 +49,17 @@ This extension for Keystone is intended to create a REST API very easy. Also is 
 	});
 
     User.add({
-      name: { type: Types.Name, required: true, index: true },
-      password: { type: Types.Password, initial: true, required: false, restSelected: false },
-      token: { type: String, restEditable: false }
+      	name: { type: Types.Name, required: true, index: true },
+      	password: { type: Types.Password, initial: true, required: false, restSelected: false },
+      	token: { type: String, restEditable: false }
     });
 	
 	User.restHooks = {
-      list: [listMiddleware],
-      show: [showMiddleware],
-      create: [createMiddleware],
-      update: [updateMiddleware],
-      delete: [deleteMiddleware]
+      	list: [listMiddleware],
+      	show: [showMiddleware],
+		create: [createMiddleware],
+      	update: [updateMiddleware],
+      	delete: [deleteMiddleware]
     };
 
     User.register();
@@ -70,10 +71,13 @@ This extension for Keystone is intended to create a REST API very easy. Also is 
 
     // Add routes with Keystone
     keystoneRestApi.createRest(keystone);
+	
+	// Create Documentation and write it to a file
+	fs.writeFileSync('api.md', keystoneRestApi.apiDocs(), 'UTF-8');
 ```
 
 ### TODO
-- The "update" and "create" method must use the Keystone UpdateHandler  
+- The "update" and "create" method must use the Keystone UpdateHandler (Done)  
 - New Tests based on the changes.
 
 ## Authors

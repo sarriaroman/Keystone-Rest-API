@@ -1,28 +1,30 @@
 {
-  "name": "keystone-rest-api",
-  "version": "0.9.2",
-  "description": "Creates a powerful Rest API based on Keystone Lists",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sarriaroman/Keystone-Rest-API.git"
-  },
-  "keywords": [
-    "keystone",
-    "keystonejs"
-  ],
-  "author": "Román Sarria",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sarriaroman/Keystone-Rest-API/issues"
-  },
-  "dependencies": {
-    "lodash": "~3.9.0"
-  },
-  "devDependencies": {
-    "ink-docstrap": "~0.3.0-0",
-    "jsdoc": "~3.3.0-alpha5",
-    "gulp-jsdoc": "~0.1.4",
-    "gulp": "~3.6.2"
-  }
+	"name": "keystone-rest-api",
+	"version": "0.9.5",
+	"description": "Creates a powerful Rest API based on Keystone Lists",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/sarriaroman/Keystone-Rest-API.git"
+	},
+	"keywords": [
+    	"keystone",
+    	"keystonejs",
+	  	"rest",
+	  	"restful"
+  	],
+	"author": "Román Sarria",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/sarriaroman/Keystone-Rest-API/issues"
+	},
+	"dependencies": {
+		"lodash": "~3.9.0"
+	},
+	"devDependencies": {
+		"ink-docstrap": "~0.3.0-0",
+		"jsdoc": "~3.3.0-alpha5",
+		"gulp-jsdoc": "~0.1.4",
+		"gulp": "~3.6.2"
+	}
 }
