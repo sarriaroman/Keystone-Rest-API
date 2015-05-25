@@ -43,7 +43,7 @@ var api_blueprint = {
 	tab: '    ',
 
 	api_doc_templates: {
-		model: '# Endpoint for {name} [{root}{endpoint}]\nThis endpoint will provide all the required methods available for {name}',
+		model: '# Endpoint for {name} [{root}{endpoint}]\nThis endpoint will provide all the required methods available for {name}\n\n+ Attributes\n{attributes}\n\n',
 		list: '## List all {name} [GET {root}{endpoint}]\nRetrieves the list of {name}\n\n+ Response 200 (application/json)',
 		show: '## Retrieve {name} [GET {root}{endpoint}/{id}]\nRetrieves item with the id\n\n+ Response 200 (application/json)',
 		create: '## Create a {name} [POST {root}{endpoint}]\n\n+ Attributes\n{attributes}\n\n+ Response 200 (application/json)',
@@ -267,7 +267,8 @@ function KeystoneRest() {
 				console.info('Rest is not enabled for ' + md.model.collection.name);
 			}
 		} catch (e) {
-			console.info('Error registering List. Please verify')
+			console.info('Error registering List. Please verify');
+			console.error(e);
 		}
 	};
 
@@ -305,7 +306,7 @@ function KeystoneRest() {
 		};
 
 		// create / update
-		if (method == 'create' || method == 'update') {
+		if (method == 'create' || method == 'update' || method == 'model') {
 			var selecteds = _getSelectedFieldsArray(Model.schema);
 
 			var attributes = [];
@@ -313,7 +314,11 @@ function KeystoneRest() {
 				var tmp = api_blueprint.tab + '+ ' + selected.path;
 
 				if (selected.instance != undefined) {
-					tmp += ' (' + api_blueprint.convertType(selected.instance) + ')';
+					tmp += ' (' + api_blueprint.convertType(selected.instance) + ( selected.isRequired ? ', required' : '' ) + ')';
+				}
+				
+				if( _.has(selected, 'enumValues') && _.isArray(selected.enumValues) && selected.enumValues.length > 0 ) {
+					tmp += api_blueprint.new_line + api_blueprint.tab + api_blueprint.tab + '+ Options: ' + selected.enumValues.join(', ');
 				}
 
 				if (_.has(selected.options, 'default') && typeof (selected.options.default) != 'Function') {
@@ -720,13 +725,9 @@ function KeystoneRest() {
 
 		var collectionName = Model.collection.name;
 		if (!_.has(api_doc, collectionName.toLowerCase())) {
-			api_doc[collectionName.toLowerCase()] = {
-				model: api_blueprint._docTemplate('model', {
-					name: collectionName,
-					root: apiRoot,
-					endpoint: collectionName.toLowerCase()
-				})
-			};
+			api_doc[collectionName.toLowerCase()] = {};
+			
+			_createDocumentation('model', Model);
 		}
 
 		var selected = _getSelected(Model.schema),

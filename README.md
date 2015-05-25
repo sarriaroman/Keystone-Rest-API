@@ -78,6 +78,16 @@ This extension for Keystone is intended to create a REST API very easy. Also is 
 	fs.writeFileSync('api.md', keystoneRestApi.apiDocs(), 'UTF-8');
 ```
 
+### Changelog  
+
+___0.9.6___  
+- Added attributes to Model Definition in the Documentation
+- Added Support for Select Field on API Generation
+- Added support for Required in Documentation
+
+___0.9.5___  
+- Added support for UpdateHandler
+
 ### TODO
 - The "update" and "create" method must use the Keystone UpdateHandler (Done)  
 - New Tests based on the changes.  
