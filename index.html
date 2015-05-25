@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Keystone REST API by sarriaroman</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Keystone REST API</h1>
+        <h2>Creates a RESTful API based on Keystone Lists. The extension is also prepared to create the Documentation of the created API</h2>
+        <a href="https://github.com/sarriaroman/Keystone-Rest-API" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="keystone-rest-api" class="anchor" href="#keystone-rest-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Keystone Rest API</h1>
+
+<p>This extension for Keystone is intended to create a REST API very easy. Also is prepared to output the Documentation for the created API. The Documentation is based on API Blueprint ( Format 1A8 ).</p>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>Automatic REST API</li>
+<li>API Documentataion</li>
+</ul>
+
+<h2>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h2>
+
+<p><a href="http://sarriaroman.github.io/Keystone-Rest-API/KeystoneRest.html">http://sarriaroman.github.io/Keystone-Rest-API</a></p>
+
+<h2>
+<a id="options" class="anchor" href="#options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options</h2>
+
+<ul>
+<li>
+<p>Model  </p>
+
+<ul>
+<li><p>rest {Boolean}  </p></li>
+<li><p>restOptions {String} 'list show create update delete'  </p></li>
+</ul>
+</li>
+<li>
+<p>List Object    </p>
+
+<ul>
+<li>restHooks {Object}<br>
+</li>
+</ul>
+</li>
+</ul>
+
+<pre><code>{
+    list: [listMiddleware],
+    show: [showMiddleware],
+    create: [createMiddleware],
+    update: [updateMiddleware],
+    delete: [deleteMiddleware]
+}
+</code></pre>
+
+<ul>
+<li>
+<p>Fields  </p>
+
+<ul>
+<li><p>restSelected {Boolean}  </p></li>
+<li><p>restEditable {Boolean}  </p></li>
+</ul>
+</li>
+</ul>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<pre><code>    var keystone = require('keystone'),
+        fs = require('fs'),
+        Types = keystone.Field.Types,
+        keystoneRestApi = require('keystone-rest-api');
+
+    var User = new keystone.List('User', {
+        rest: true,
+        restOptions: 'list show create update delete'
+    });
+
+    User.add({
+        name: { type: Types.Name, required: true, index: true },
+        password: { type: Types.Password, initial: true, required: false, restSelected: false },
+        token: { type: String, restEditable: false }
+    });
+
+    User.restHooks = {
+        list: [listMiddleware],
+        show: [showMiddleware],
+        create: [createMiddleware],
+        update: [updateMiddleware],
+        delete: [deleteMiddleware]
+    };
+
+    User.register();
+
+    // Make sure keystone is initialized and started before
+    // calling createRest
+    keystone.init(config);
+    keystone.start();
+
+    // Add routes with Keystone
+    keystoneRestApi.createRest(keystone);
+
+    // Create Documentation and write it to a file
+    fs.writeFileSync('api.md', keystoneRestApi.apiDocs(), 'UTF-8');
+</code></pre>
+
+<h3>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>TODO</h3>
+
+<ul>
+<li>The "update" and "create" method must use the Keystone UpdateHandler (Done)<br>
+</li>
+<li>New Tests based on the changes.</li>
+</ul>
+
+<h2>
+<a id="authors" class="anchor" href="#authors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors</h2>
+
+<ul>
+<li><p>Román A. Sarria  </p></li>
+<li><p>Based on Keystone Rest from Dan Quinn <a href="Original%20Repository">https://github.com/danielpquinn/keystone-rest</a>  </p></li>
+</ul>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/sarriaroman/Keystone-Rest-API/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/sarriaroman/Keystone-Rest-API/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/sarriaroman/Keystone-Rest-API"></a> is maintained by <a href="https://github.com/sarriaroman">sarriaroman</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
