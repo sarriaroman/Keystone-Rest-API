@@ -8,7 +8,7 @@ This extension for Keystone is intended to create a REST API very easy. Also is 
 
 ## Documentation
 
-[http://sarriaroman.github.io/Keystone-Rest-API](http://sarriaroman.github.io/Keystone-Rest-API/KeystoneRest.html)
+[http://sarriaroman.github.io/Keystone-Rest-API](http://sarriaroman.github.io/Keystone-Rest-API)
 
 ## Options
 
