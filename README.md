@@ -16,6 +16,8 @@ This extension for Keystone is intended to create a REST API very easy. Also is 
  	+ rest {Boolean}  
 	
 	+ restOptions {String} 'list show create update delete'  
+	
+	+ restDescription {String}
   
  - List Object    
   	+ restHooks {Object}  
@@ -80,6 +82,13 @@ This extension for Keystone is intended to create a REST API very easy. Also is 
 
 ### Changelog  
 
+___0.9.7.1___  
+- Added ignoreNoEdit to Create to avoid awful errors for now  
+
+___0.9.7___  
+- restDescription field to specify the Description of the REST Endpoint  
+- Use of keystone Name to create the Header of the Blueprint API Document
+
 ___0.9.6___  
 - Added attributes to Model Definition in the Documentation
 - Added Support for Select Field on API Generation
@@ -90,6 +99,14 @@ ___0.9.5___
 
 ### TODO
 - The "update" and "create" method must use the Keystone UpdateHandler (Done)  
+- Implement a way to set Options for UpdateHandler  
+
+```javascript
+restOptions: {
+	ignoreNoedit: true
+}
+```
+				
 - New Tests based on the changes.  
 
 ## Authors

@@ -346,7 +346,7 @@ function KeystoneRest() {
 	 */
 	var _addList = function (Model, middleware, selected, relationships) {
 		// Create Docs
-		_createDocumentation('show', Model);
+		_createDocumentation('list', Model);
 
 		// Get a list of items
 		self.routes.push({
@@ -482,7 +482,7 @@ function KeystoneRest() {
 
 	var _addShow = function (Model, middleware, selected, findBy) {
 		// Create Docs
-		_createDocumentation('list', Model);
+		_createDocumentation('show', Model);
 
 		var collectionName = Model.collection.name.toLowerCase();
 		var paramName = Model.modelName.toLowerCase();
@@ -552,11 +552,15 @@ function KeystoneRest() {
 				_flattenRelationships(Model, req.body);
 
 				var md = new Model();
-
+				var options = {
+					flashErrors: false,
+					ignoreNoedit: true
+				};
+				
 				// Get the UpdateHandler from Keystone and process the Request
-				md.getUpdateHandler(req).process(req.body, {
-					flashErrors: false
-				}, function (err, item) {
+				md.getUpdateHandler(req).process(req.body, options, function (err, item) {
+					console.error(err);
+					console.info(item);
 					if (err) {
 						return _sendError(err, req, res, next);
 					}
