@@ -808,8 +808,10 @@ function KeystoneRest() {
 		// Get and register the models
 		_registerRestModels(keystone);
 
-		_.each(self.routes, function (route) {
-			keystone.app[route.method](route.route, route.middleware, route.handler);
+		keystone.set('routes', app => {
+			_.each(self.routes, function (route) {
+				app[route.method](route.route, route.middleware, route.handler);
+			});
 		});
 	};
 
