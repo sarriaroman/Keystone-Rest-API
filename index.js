@@ -808,7 +808,9 @@ function KeystoneRest() {
 		// Get and register the models
 		_registerRestModels(keystone);
 
+		const setCurrentRoutes = keystone.get('routes')
 		keystone.set('routes', app => {
+			setCurrentRoutes(app)
 			_.each(self.routes, function (route) {
 				app[route.method](route.route, route.middleware, route.handler);
 			});
