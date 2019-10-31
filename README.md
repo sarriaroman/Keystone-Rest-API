@@ -68,13 +68,15 @@ This extension for Keystone is intended to create a REST API very easy. Also is 
 
     // Make sure keystone is initialized and started before
     // calling createRest
+
     keystone.init(config);
-    keystone.start();
 
     // Add routes with Keystone
     keystoneRestApi.createRest(keystone, {
-		apiRoot: '/api/v1/'
+		apiRoot: '/api/'
 	});
+
+    keystone.start();
 	
 	// Create Documentation and write it to a file
 	fs.writeFileSync('api.md', keystoneRestApi.apiDocs(), 'UTF-8');
