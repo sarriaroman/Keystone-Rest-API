@@ -369,9 +369,10 @@ function KeystoneRest() {
 					if (err) {
 						return _sendError(err, req, res, next);
 					}
-
-					var query = Model.find(criteria).skip(req.query.skip)
-						.limit(req.query.limit)
+					var limit = req.query.limit ? Number.parseInt(req.query.limit) : undefined;
+					var skip = req.query.skip ? Number.parseInt(req.query.skip) : undefined;
+					var query = Model.find(criteria).skip(skip)
+						.limit(limit)
 						.sort(req.query.sort)
 						.select(querySelect || selected);
 
